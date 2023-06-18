@@ -26,7 +26,14 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 
 
+Route::group(['middleware' =>'auth:sanctum'], function () {
+    Route::post('/post/store', [PostController::class, 'store']);
 
-Route::post('/post/store', [PostController::class, 'store'])->middleware('auth:sanctum');
+});
 
+
+Route::group(['middleware' => 'IsAdmin'], function () {
+    Route::get('/post/showHidePosts', [PostController::class, 'showHidePosts']);
+
+});
 

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -38,12 +40,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-     $result=Post::create([
-            'title' => 'Flight 10',
-            'content' => 'Flight 10',
-            'user_id' => Auth::user()->id,
+        $validator = Validator::make($request->all(), [
+            'title'=>['required','max:10','string'],
+            'content'=>['required','max:10','string'],
+            'status' =>['nullable',Rule::in(['hide', 'display'])]
         ]);
-     
+        
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+        
+        $result=Post::create([
+                'title' => 'Flight 10',
+                'content' => 'Flight 10',
+                'user_id' => Auth::user()->id,
+            ]);
+        
         return  response()->json($result, 200);
 
     }
@@ -54,9 +67,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function showHidePosts()
     {
-        //
+        $results= Post::where('status','hide')->get();
+
+        return  response()->json($results, 200);
+
     }
 
     /**

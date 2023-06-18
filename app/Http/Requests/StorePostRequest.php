@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -24,9 +25,10 @@ class StorePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'text'],
-            'content' => ['required', 'text'],
-            'user_id' => ['required', 'exists:users,id'],
+            'title'=>['required','max:10','string'],
+            'content'=>['required','max:10','string'],
+            'user_id'=> ['required','exists:App\Models\User,id'],
+            'status' =>['nullable',Rule::in(['hide', 'display'])]
         ];
     }
 }

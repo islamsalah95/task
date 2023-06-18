@@ -50,4 +50,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Post::class,'user_id');
     }
+
+
+    public function device()
+    {
+
+        return $this->belongsToMany(Device::class);
+
+    }
 }

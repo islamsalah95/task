@@ -34,6 +34,7 @@ Route::group(['middleware' =>'auth:sanctum'], function () {
 
 Route::group(['middleware' => 'IsAdmin'], function () {
     Route::get('/post/showHidePosts', [PostController::class, 'showHidePosts']);
+    Route::post('/post/changeStatusPost/{id}', [PostController::class, 'changeStatusPost']);
 
 });
 

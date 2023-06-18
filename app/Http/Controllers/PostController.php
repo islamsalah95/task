@@ -108,4 +108,22 @@ class PostController extends Controller
     {
         //
     }
+
+    public function changeStatusPost(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' =>['nullable',Rule::in(['hide', 'display'])]
+        ]);
+        
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+
+        $post = Post::find($id);
+        $post->status =$request->status;
+        $post->save();
+
+        return  response()->json($post, 200);
+    }
 }

@@ -32,6 +32,18 @@ class PostController extends Controller
         //
     }
 
+    public function show(Request $request)
+    {
+    if ($request->has('me')) {
+        $results = Post::where('user_id', auth()->user()->id)->get();
+    } else {
+        $results = Post::where('status', 'display')->get();
+    }
+
+        return  response()->json($results, 200);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
